@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using MagicVilla_VillaAPI.Logging;
 
 namespace MagicVilla_VillaAPI.Controllers
 {
@@ -17,19 +18,28 @@ namespace MagicVilla_VillaAPI.Controllers
     [ApiController]
     public class VillaAPIController : ControllerBase
     {
-        private readonly ILogger<VillaAPIController> _logger;
-        public VillaAPIController(ILogger<VillaAPIController> logger)
+        //private readonly ILogger<VillaAPIController> _logger;
+        //public VillaAPIController(ILogger<VillaAPIController> logger)
+        //{
+        //    _logger = logger;
+
+        //}
+
+        private readonly ILoggerCustom _logger;
+        public VillaAPIController(ILoggerCustom logger)
         {
             _logger = logger;
 
         }
+
+
 
         [HttpGet] // this is the endpoints it helps to communication with other application which 
         //is using this api 
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<VillaDto>> GetVillas()
         {
-            _logger.LogInformation("Getting all the Villas");
+            _logger.Info("Getting all the Villas","");
             //ActionResult is very useful when we have multiple return type 
             
             return Ok(VillaStore.villaList);
@@ -52,7 +62,7 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             if(id ==0)
             {
-                _logger.LogError("Get the Error while getting with {0}" , id);
+                _logger.Info("Get the Error while getting with " +id,"Error");
                 return BadRequest();
             }
 
