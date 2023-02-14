@@ -1,4 +1,7 @@
+using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Logging;
+using Microsoft.AspNetCore.Hosting.Builder;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -6,6 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 //Log.Logger = new LoggerConfiguration().MinimumLevel.Debug().WriteTo.File("log/villaLog.txt", rollingInterval: RollingInterval.Day).CreateLogger();
 //builder.Host.UseSerilog();
+
+//add database configuration
+builder.Services.AddDbContext<ApplicationDbContext>(Options=>
+{
+  Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnectionString"));
+});
+
 
 builder.Services.AddSingleton<ILoggerCustom, Logg>();//this is how dependency injection will be added 
 

@@ -133,8 +133,8 @@ namespace MagicVilla_VillaAPI.Controllers
             }
             var vil = VillaStore.villaList.FirstOrDefault(u=>u.Id== id);
             vil.Name = villa.Name;
-            vil.SqFeet = villa.SqFeet;
-            vil.Place = villa.Place;
+            //vil.SqFeet = villa.SqFeet;
+            //vil.Place = villa.Place;
             return NoContent();
 
 
