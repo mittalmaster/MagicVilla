@@ -1,3 +1,4 @@
+using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Logging;
 using Microsoft.AspNetCore.Hosting.Builder;
@@ -27,6 +28,7 @@ builder.Services.AddControllers(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddAutoMapper(typeof(MappingConfig)); //add service to automapper
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
