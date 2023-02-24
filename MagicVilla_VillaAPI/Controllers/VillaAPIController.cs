@@ -1,10 +1,8 @@
 ﻿using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.Dtos;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
 using MagicVilla_VillaAPI.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
@@ -42,13 +40,11 @@ namespace MagicVilla_VillaAPI.Controllers
         public async Task<ActionResult<IEnumerable<VillaDto>>> GetVillas()
         {
             _logger.Info("Getting all the Villas","");
-            //ActionResult is very useful when we have multiple return type 
-            
+            //ActionResult is very useful when we have multiple return type
             IEnumerable<Villa> villaList = await _db.Villas.ToListAsync();
-
             return Ok(_mapper.Map<List<VillaDto>>(villaList));
-
         }
+
         //[HttpGet("id")]  //this will expect id
         [HttpGet("{id:int}")]  // in this we expilicitly define it as int
         //define the possible outcomes
@@ -92,7 +88,7 @@ namespace MagicVilla_VillaAPI.Controllers
             if(villaCreate == null)
             {
                 return BadRequest(villaCreate);
-            }          
+            }      
            
 
             await _db.Villas.AddAsync(_mapper.Map<Villa>(villaCreate));
@@ -154,29 +150,11 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 return NotFound();
             }
-            /*var villaTemp = new VillaUpdateDTO();
-            villaTemp.Id = villa.Id;
-            villaTemp.Name = villa.Name;
-            villaTemp.Details = villa.Details;
-            villaTemp.Occupancy = villa.Occupancy;
-            villaTemp.Rate = villa.Rate;
-            villaTemp.Amenity = villa.Amenity;
-            villaTemp.Sqft = villa.Sqft;
-            
-            villaTemp.ImageUrl = villa.ImageUrl;*/
+           
             var temp = _mapper.Map<VillaUpdateDTO>(villa);
             patchUpdateDocument.ApplyTo(temp, ModelState);
             //{ "op": "add", "path": "/biscuits/1", "value": { "name": "Ginger Nut" } }
             //while adding from Swagger API enters values in this format 
-
-            /*var UpdatedVilla = new Villa();
-            UpdatedVilla.Id = villaTemp.Id;
-            UpdatedVilla.Name = villaTemp.Name;
-            UpdatedVilla.Details = villaTemp.Details;
-            UpdatedVilla.Occupancy= villaTemp.Occupancy;
-            UpdatedVilla.Rate = villaTemp.Rate;
-            UpdatedVilla.Amenity= villaTemp.Amenity;
-            UpdatedVilla.Sqft = villaTemp.Sqft;*/
 
             _db.Villas.Update(_mapper.Map<Villa>(temp));
             await _db.SaveChangesAsync();
