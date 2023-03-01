@@ -1,8 +1,11 @@
 using MagicVilla_VillaAPI;
 using MagicVilla_VillaAPI.Data;
 using MagicVilla_VillaAPI.Logging;
+using MagicVilla_VillaAPI.Repository;
+using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.AspNetCore.Hosting.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +20,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(Options=>
   Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultSQLConnectionString"));
 });
 
+builder.Services.AddTransient<IVillaRepository, VillaRepository>();//dependency injection
+builder.Services.AddTransient<IVillaNumberRepository, VillaNumberRepository>();//dependency injection
 
 builder.Services.AddSingleton<ILoggerCustom, Logg>();//this is how dependency injection will be added 
 

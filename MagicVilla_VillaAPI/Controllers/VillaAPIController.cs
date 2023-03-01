@@ -7,6 +7,7 @@ using MagicVilla_VillaAPI.Logging;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using System.Net;
+using MagicVilla_VillaAPI.Repository.IRepository;
 
 namespace MagicVilla_VillaAPI.Controllers
 {
@@ -25,11 +26,13 @@ namespace MagicVilla_VillaAPI.Controllers
         //    _logger = logger;
         //}
         protected APIResponse _response;
+        private readonly IVillaRepository _dbVilla;
         private readonly ILoggerCustom _logger;
         private readonly ApplicationDbContext _db;
         private readonly IMapper _mapper;
-        public VillaAPIController(ILoggerCustom logger, ApplicationDbContext db,IMapper mapper)
+        public VillaAPIController(IVillaRepository villaRepository,ILoggerCustom logger, ApplicationDbContext db,IMapper mapper)
         {
+            _dbVilla = villaRepository;
             _logger = logger;
             _db = db;
             _mapper = mapper;
@@ -45,7 +48,7 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 _logger.Info("Getting all the Villas", "");
                 //ActionResult is very useful when we have multiple return type
-                IEnumerable<Villa> villaList = await _db.Villas.ToListAsync();
+                IEnumerable<Villa> villaList = await _dbVilla.GetAll();
                 _response.Result = _mapper.Map<List<VillaDto>>(villaList);
                 _response.StatusCode = HttpStatusCode.OK;
                 return Ok(_response);
@@ -82,7 +85,7 @@ namespace MagicVilla_VillaAPI.Controllers
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return BadRequest(_response);
                 }
-                var villa = await _db.Villas.FirstOrDefaultAsync(u => u.Id == id);
+                var villa = await _dbVilla.Get(u=>u.Id == id);//best way to get and pass linq operation
                 if (villa is null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
@@ -108,10 +111,8 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             try
             {
-
-
                 //Custom Errors 
-                if (await _db.Villas.FirstOrDefaultAsync(u => u.Name.ToLower() == villaCreate.Name.ToLower()) != null)
+                if (await _dbVilla.Get(u => u.Name.ToLower() == villaCreate.Name.ToLower()) != null)
                 {
                     ModelState.AddModelError("CustomError", "This Villa Already Exist ");
                 }
@@ -121,9 +122,8 @@ namespace MagicVilla_VillaAPI.Controllers
                     _response.Result = villaCreate;
                     return BadRequest(_response);
                 }
-
-                await _db.Villas.AddAsync(_mapper.Map<Villa>(villaCreate));
-                await _db.SaveChangesAsync();
+                await _dbVilla.Create(_mapper.Map<Villa>(villaCreate));
+                //await _dbVilla.Save();
                 _response.StatusCode = HttpStatusCode.OK;
                 _response.Result = villaCreate;
                 return Ok(_response.Result);
@@ -134,13 +134,11 @@ namespace MagicVilla_VillaAPI.Controllers
                 _response.ErrorMessages = new List<string> { ex.ToString() };
             }
             return _response;
-
         }
 
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-
         [HttpDelete("{id:int}",Name ="DeleteVilla")]
         public async Task<ActionResult<APIResponse>> DeleteVilla(int id) //for IActionResult no need to define return type
         {
@@ -151,14 +149,14 @@ namespace MagicVilla_VillaAPI.Controllers
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-                var deletedItem = await _db.Villas.FirstOrDefaultAsync(u => u.Id == id);
+                var deletedItem = await _dbVilla.Get(u => u.Id == id);
                 if (deletedItem is null)
                 {
                     _response.StatusCode = HttpStatusCode.NotFound;
                     return NotFound(_response);
                 }
-                _db.Villas.Remove(deletedItem); //for remove there is no await 
-                await _db.SaveChangesAsync();
+                await _dbVilla.Remove(deletedItem); //for remove there is no await 
+                //await _dbVilla.Save();
                 _response.StatusCode = HttpStatusCode.NoContent;
                 _response.IsSuccess = true;
                 return Ok(_response);
@@ -167,7 +165,6 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 _response.IsSuccess = false;
                 _response.ErrorMessages = new List<string> { ex.ToString() };
-
             }
             return _response;
         }
@@ -179,18 +176,13 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             try
             {
-
-
                 if (villaUpdate == null || id != villaUpdate.Id)
                 {
                     _response.StatusCode = HttpStatusCode.BadRequest;
                     return BadRequest(_response);
                 }
-
-                _db.Villas.Update(_mapper.Map<Villa>(villaUpdate));
-                await _db.SaveChangesAsync();
+                await _dbVilla.Update(_mapper.Map<Villa>(villaUpdate));                
                 _response.StatusCode = HttpStatusCode.NoContent;
-
                 return Ok(_response);
             }
             catch (Exception ex)
@@ -212,7 +204,7 @@ namespace MagicVilla_VillaAPI.Controllers
             {
                 return BadRequest();
             }
-            var villa =await _db.Villas.AsNoTracking().FirstOrDefaultAsync(v => v.Id== id);
+            var villa =await _dbVilla.Get(v => v.Id== id,false);
             if(villa==null)
             {
                 return NotFound();
@@ -223,8 +215,7 @@ namespace MagicVilla_VillaAPI.Controllers
             //{ "op": "add", "path": "/biscuits/1", "value": { "name": "Ginger Nut" } }
             //while adding from Swagger API enters values in this format 
 
-            _db.Villas.Update(_mapper.Map<Villa>(temp));
-            await _db.SaveChangesAsync();
+            await _dbVilla.Update(_mapper.Map<Villa>(temp));            
 
             if (!ModelState.IsValid)
             {

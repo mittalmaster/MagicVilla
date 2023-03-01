@@ -3,20 +3,18 @@ using System.Linq.Expressions;
 
 namespace MagicVilla_VillaAPI.Repository.IRepository
 {
-    public interface IVillaRepository
+    public interface IVillaNumberRepository
     {
-        //this is to get the list of all villas
-        //filter can be a condition we may be required 
-        Task<List<Villa>> GetAll(Expression<Func<Villa,bool>> filter = null);
+        Task<List<VillaNumber>> GetAll(Expression<Func<VillaNumber, bool>> filter = null);
         //this is to get the single villas filter is condition like 
         //first or default etc , tracked is askNoTrack etc
-        Task<Villa> Get(Expression<Func<Villa, bool>> filter = null, bool tracked = true);
+        Task<VillaNumber> Get(Expression<Func<VillaNumber, bool>> filter = null, bool tracked = true);
         //it is related to the task we want to create s
-        Task Create(Villa entity);
+        Task Create(VillaNumber entity);
         //this is for deletion 
-        Task Remove(Villa entity);
+        Task Remove(VillaNumber entity);
         //this is to save the changes that has been dones
-        Task Update(Villa entity);
+        Task Update(VillaNumber entity);
         Task Save();
     }
 }
