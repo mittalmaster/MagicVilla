@@ -1,0 +1,72 @@
+﻿@model MagicVilla_Web.Models.Dtos.VillaDto
+
+
+<form asp-action="DeleteVilla">
+    <div class="container border pb-3">
+        <h1 class="text-primary">Delete Villa</h1>
+        <hr />
+        <br />
+        <div class="row">          
+            
+            <input hidden asp-for="Id" class="form-control" />           
+
+            <div class="col-2">
+                <label asp-for="Name" class="control-label pt-2"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Name" class="form-control" disabled />
+                
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Details" class="control-label pt-2"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <textarea asp-for="Details" class="form-control" disabled></textarea>
+                
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Rate" class="control-label pt-2"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Rate" class="form-control" disabled />               
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Occupancy" class="control-label pt-2"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Occupancy" class="form-control" disabled />                
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Sqft" class="control-label pt-2"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Sqft" class="form-control" disabled />                
+            </div>
+
+            <div class="col-2">
+                <label asp-for="ImageUrl" class="control-label pt-2"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="ImageUrl" class="form-control" disabled />                
+            </div>
+
+            <div class="col-2">
+                <label asp-for="Amenity" class="control-label pt-2"></label>
+            </div>
+            <div class="col-10 pb-3">
+                <input asp-for="Amenity" class="form-control" disabled />                
+            </div>
+            <br />
+            <div class="col-5 offset-2">
+                <a asp-action="IndexVilla" class="btn-primary btn form-control">Cancel Delete</a>
+            </div>
+            <div class="col-5 pb-3">
+                <input type="submit" class="btn btn-danger form-control" />
+            </div>
+        </div>
+    </div>
+</form>
