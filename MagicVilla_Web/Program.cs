@@ -7,8 +7,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddAutoMapper(typeof(MappingConfig)); //add service of automapper 
+
 builder.Services.AddHttpClient<IVillaService, VillaService>();//add http client
 builder.Services.AddScoped<IVillaService, VillaService>(); // Add Villa Service
+
+builder.Services.AddHttpClient<IVillaNumberService, VillaNumberService>();//add http client
+builder.Services.AddScoped<IVillaNumberService, VillaNumberService>(); // Add VillaNumber Service
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

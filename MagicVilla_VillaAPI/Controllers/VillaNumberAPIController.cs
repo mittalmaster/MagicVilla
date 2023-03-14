@@ -10,7 +10,7 @@ using System.Net;
 
 namespace MagicVilla_VillaAPI.Controllers
 {
-    [Route("api/VillaAPIii")]
+    [Route("api/VillaNumberApi")]
     [ApiController]
     public class VillaNumberAPIController : Controller
     {
