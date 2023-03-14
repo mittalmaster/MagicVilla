@@ -5,10 +5,10 @@ namespace MagicVilla_VillaAPI.Repository.IRepository
 {
     public interface IVillaNumberRepository
     {
-        Task<List<VillaNumber>> GetAll(Expression<Func<VillaNumber, bool>> filter = null);
+        Task<List<VillaNumber>> GetAll(Expression<Func<VillaNumber, bool>> filter = null, string? includeProperties = null);
         //this is to get the single villas filter is condition like 
         //first or default etc , tracked is askNoTrack etc
-        Task<VillaNumber> Get(Expression<Func<VillaNumber, bool>> filter = null, bool tracked = true);
+        Task<VillaNumber> Get(Expression<Func<VillaNumber, bool>> filter = null, bool tracked = true, string? includeProperties = null);
         //it is related to the task we want to create s
         Task Create(VillaNumber entity);
         //this is for deletion 
