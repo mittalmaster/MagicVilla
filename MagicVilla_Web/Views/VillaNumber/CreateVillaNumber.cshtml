@@ -1,0 +1,58 @@
+﻿@model MagicVilla_Web.Models.ViewModel.VillaNumberCreateVM
+
+<form asp-action="CreateVillaNumber">
+    <br />
+    <div class="container border p-3">
+        <h1 class="text-primary">Create VillaNumber </h1>
+        <hr />
+        <div class="row">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+      
+        <div class="col-2">
+            <label asp-for="VillaNumber.VillaNo" class="control-label pt-2"></label>
+        </div>
+        <div class="col-10 pb-3">
+            <input asp-for="VillaNumber.VillaNo" class="form-control" />
+            <span asp-validation-for="VillaNumber.VillaId" class="text-danger"></span>
+        </div>
+        <br />
+
+        <div class="col-2">
+            <label asp-for="VillaNumber.VillaId" class="control-label pt-2"></label>
+        </div>
+        <div class="col-10 pb-3">
+            <Select asp-for="VillaNumber.VillaId" class="form-select" asp-items="@Model.villaList">
+                <option disabled selected> --Select Option -- </option>
+            </Select>
+            <span asp-validation-for="VillaNumber.VillaId" class="text-danger"></span>
+        </div>
+
+
+        <br />
+        <div class="col-2">
+            <label asp-for="VillaNumber.SpecialDetails" class="control-label pt-2"></label>
+        </div>
+            <div class="col-10 pb-3">
+            <textarea asp-for="VillaNumber.SpecialDetails" class="form-control"></textarea>
+                <span asp-validation-for="VillaNumber.SpecialDetails" class="text-danger"></span>
+    </div>
+   
+            <br />
+            <div class="col-5 offset-2">
+                <a asp-action="IndexVillaNumber" class="btn-primary btn form-control">Back to List</a>
+            </div>
+            <div class="col-5">
+                <input type="submit" class="btn btn-success form-control" />
+
+            </div>
+
+        </div>
+
+    </div>
+    
+
+
+
+
+
+</form>
