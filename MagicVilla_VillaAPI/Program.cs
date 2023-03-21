@@ -22,7 +22,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(Options=>
 
 builder.Services.AddTransient<IVillaRepository, VillaRepository>();//dependency injection
 builder.Services.AddTransient<IVillaNumberRepository, VillaNumberRepository>();//dependency injection
-
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddSingleton<ILoggerCustom, Logg>();//this is how dependency injection will be added 
 
 builder.Services.AddControllers(options =>
@@ -34,6 +34,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddAutoMapper(typeof(MappingConfig)); //add service to automapper
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

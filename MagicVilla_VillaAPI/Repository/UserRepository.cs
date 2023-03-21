@@ -33,8 +33,16 @@ namespace MagicVilla_VillaAPI.Repository
         public async Task<LoginResponseDTO> Login(LoginRequestDTO loginRequestDTO)
         {
             var loginResponseDTO = new LoginResponseDTO();
-            var x = await _db.LocalUsers.FirstOrDefaultAsync(u=>u.UserName== loginRequestDTO.UserName && u.Password==loginRequestDTO.Password);
-            loginResponseDTO.User = x;
+            var user = await _db.LocalUsers.FirstOrDefaultAsync(u=>u.UserName== loginRequestDTO.UserName && u.Password==loginRequestDTO.Password);
+            if(user == null)
+            {
+                return new LoginResponseDTO()
+                {
+                    Token = "",
+                    User = null
+                };
+
+            }
 
 
 
@@ -46,8 +54,8 @@ namespace MagicVilla_VillaAPI.Repository
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, x.Id.ToString()),
-                    new Claim(ClaimTypes.Role, x.Role)
+                    new Claim(ClaimTypes.Name, user.Id.ToString()),
+                    new Claim(ClaimTypes.Role, user.Role)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -55,6 +63,7 @@ namespace MagicVilla_VillaAPI.Repository
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             loginResponseDTO.Token = tokenHandler.WriteToken(token);
+            loginResponseDTO.User = user;
             return loginResponseDTO;
 
         }
