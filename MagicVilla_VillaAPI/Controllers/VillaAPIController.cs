@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using System.Net;
 using MagicVilla_VillaAPI.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MagicVilla_VillaAPI.Controllers
 {
@@ -42,6 +43,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [HttpGet] // this is the endpoints it helps to communication with other application which 
         //is using this api 
         [ProducesResponseType(StatusCodes.Status200OK)]
+        [Authorize]
         public async Task<ActionResult<APIResponse>> GetVillas()
         {
             try
@@ -68,6 +70,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [Authorize("Roles = admin")]
 
         //other way to write but above is better more readable and not hardcoded
        // [ProducesResponseType(200,Type=typeof(VillaDto))] //by this we can simply write ActionResult
@@ -140,6 +143,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [HttpDelete("{id:int}",Name ="DeleteVilla")]
+        [Authorize("Roles = Custom")]
         public async Task<ActionResult<APIResponse>> DeleteVilla(int id) //for IActionResult no need to define return type
         {
             try
