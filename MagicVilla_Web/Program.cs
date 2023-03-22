@@ -14,6 +14,9 @@ builder.Services.AddScoped<IVillaService, VillaService>(); // Add Villa Service
 builder.Services.AddHttpClient<IVillaNumberService, VillaNumberService>();//add http client
 builder.Services.AddScoped<IVillaNumberService, VillaNumberService>(); // Add VillaNumber Service
 
+builder.Services.AddHttpClient<IAuthService, AuthService>();
+builder.Services.AddScoped<IAuthService,AuthService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
